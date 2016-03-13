@@ -95,9 +95,10 @@ public class CircularSliderRange extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircularSlider, defStyleAttr, 0);
 
         // read all available attributes
-        float startAngle = a.getFloat(R.styleable.CircularSlider_start_angle, (float) Math.PI / 2);
-        float endAngle = a.getFloat(R.styleable.CircularSlider_end_angle, (float) Math.PI / 2);
-        //float angle = a.getFloat(R.styleable.CircularSlider_angle, (float) Math.PI / 2);
+        float startAngle = a.getFloat(R.styleable.CircularSlider_start_angle, 90);
+        startAngle = (float) Math.toRadians(startAngle);
+        float endAngle = a.getFloat(R.styleable.CircularSlider_end_angle, 60);
+        endAngle = (float) Math.toRadians(endAngle);
         int thumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_thumb_size, 50);
         int thumbColor = a.getColor(R.styleable.CircularSlider_start_thumb_color, Color.GRAY);
         int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
@@ -133,18 +134,20 @@ public class CircularSliderRange extends View {
     /* ***** Setters ***** */
 
     /**
-     * Set start angle in radians.
+     * Set start angle in degrees.
+     * <br/>An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
      *
-     * @param startAngle value in radians.
+     * @param startAngle value in degrees.
      */
     public void setStartAngle(double startAngle) {
         mAngle = startAngle;
     }
 
     /**
-     * Set end angle in radians.
+     * Set end angle in degrees.
+     * <br/>An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
      *
-     * @param angle value in radians.
+     * @param angle value in degrees.
      */
     public void setEndAngle(double angle) {
         mAngleEnd = angle;
