@@ -49,7 +49,8 @@ public class CircularSliderRange extends View {
     private int mCircleCenterY;
     private int mCircleRadius;
 
-    private Drawable mThumbImage;
+    private Drawable mStartThumbImage;
+    private Drawable mEndThumbImage;
     private int mPadding;
     private int mThumbSize;
     private int mStartThumbColor;
@@ -104,7 +105,8 @@ public class CircularSliderRange extends View {
         int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
         int borderThickness = a.getDimensionPixelSize(R.styleable.CircularSlider_border_thickness, 20);
         int borderColor = a.getColor(R.styleable.CircularSlider_border_color, Color.RED);
-        Drawable thumbImage = a.getDrawable(R.styleable.CircularSlider_thumb_image);
+        Drawable thumbImage = a.getDrawable(R.styleable.CircularSlider_start_thumb_image);
+        Drawable thumbEndImage = a.getDrawable(R.styleable.CircularSlider_end_thumb_image);
 
         // save those to fields (really, do we need setters here..?)
         setStartAngle(startAngle);
@@ -112,7 +114,8 @@ public class CircularSliderRange extends View {
         setBorderThickness(borderThickness);
         setBorderColor(borderColor);
         setThumbSize(thumbSize);
-        setThumbImage(thumbImage);
+        setStartThumbImage(thumbImage);
+        setEndThumbImage(thumbEndImage);
         setStartThumbColor(thumbColor);
         setEndThumbColor(thumbEndColor);
 
@@ -166,8 +169,12 @@ public class CircularSliderRange extends View {
         mBorderColor = color;
     }
 
-    public void setThumbImage(Drawable drawable) {
-        mThumbImage = drawable;
+    public void setStartThumbImage(Drawable drawable) {
+        mStartThumbImage = drawable;
+    }
+
+    public void setEndThumbImage(Drawable drawable) {
+        mEndThumbImage = drawable;
     }
 
     public void setStartThumbColor(int color) {
@@ -231,27 +238,35 @@ public class CircularSliderRange extends View {
         arcRectF.set(arcRect);
         arcRectF.sort();
 
-        float drawStart = toDrawingAngle(mAngle);
-        float drawEnd = toDrawingAngle(mAngleEnd);
+        final float drawStart = toDrawingAngle(mAngle);
+        final float drawEnd = toDrawingAngle(mAngleEnd);
 
         canvas.drawArc(arcRectF, drawStart, (360 + drawEnd - drawStart) % 360, false, mLinePaint);
 
-        if (mThumbImage != null) {
+        if (mStartThumbImage != null) {
             // draw png
-            mThumbImage.setBounds(mThumbStartX - mThumbSize / 2, mThumbStartY - mThumbSize / 2, mThumbStartX + mThumbSize / 2, mThumbStartY + mThumbSize / 2);
-            mThumbImage.draw(canvas);
+            mStartThumbImage.setBounds(mThumbStartX - mThumbSize / 2, mThumbStartY - mThumbSize / 2, mThumbStartX + mThumbSize / 2, mThumbStartY + mThumbSize / 2);
+            mStartThumbImage.draw(canvas);
         } else {
             // draw colored circle
             mPaint.setColor(mStartThumbColor);
             mPaint.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(mThumbStartX, mThumbStartY, mThumbSize, mPaint);
-            mPaint.setColor(mEndThumbColor);
-            canvas.drawCircle(mThumbEndX, mThumbEndY, mThumbSize, mPaint);
+            canvas.drawCircle(mThumbStartX, mThumbStartY, mThumbSize / 2, mPaint);
 
-            //helper text
+            //helper text, used for debugging
             //mLinePaint.setStrokeWidth(5);
             //canvas.drawText(String.format(Locale.US, "%.1f", drawStart), mThumbStartX - 20, mThumbStartY, mLinePaint);
             //canvas.drawText(String.format(Locale.US, "%.1f", drawEnd), mThumbEndX - 20, mThumbEndY, mLinePaint);
+        }
+
+        if (mEndThumbImage != null) {
+            // draw png
+            mEndThumbImage.setBounds(mThumbEndX - mThumbSize / 2, mThumbEndY - mThumbSize / 2, mThumbEndX + mThumbSize / 2, mThumbEndY + mThumbSize / 2);
+            mEndThumbImage.draw(canvas);
+        } else {
+            mPaint.setStyle(Paint.Style.FILL);
+            mPaint.setColor(mEndThumbColor);
+            canvas.drawCircle(mThumbEndX, mThumbEndY, mThumbSize / 2, mPaint);
         }
     }
 

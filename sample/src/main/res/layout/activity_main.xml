@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:circular="http://schemas.android.com/apk/res-auto"
+    xmlns:range="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,12 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="30dp"
-        circular:border_color="#505090"
-        circular:border_thickness="14dp"
-        circular:end_angle="30"
-        circular:end_thumb_color="#FFFF00"
-        circular:start_angle="120"
-        circular:start_thumb_color="#30AEFF"
-        circular:thumb_size="24dp" />
+        range:border_color="#505090"
+        range:border_thickness="14dp"
+        range:end_angle="30"
+        range:end_thumb_image="@drawable/circle_shape"
+        range:start_angle="120"
+        range:start_thumb_color="#30AEFF"
+        range:thumb_size="60dp" />
 
 </RelativeLayout>
