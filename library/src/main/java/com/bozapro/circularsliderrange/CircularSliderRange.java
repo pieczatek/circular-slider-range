@@ -138,7 +138,7 @@ public class CircularSliderRange extends View {
 
     /**
      * Set start angle in degrees.
-     * <br/>An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
+     * An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
      *
      * @param startAngle value in degrees.
      */
@@ -148,7 +148,7 @@ public class CircularSliderRange extends View {
 
     /**
      * Set end angle in degrees.
-     * <br/>An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
+     * An angle of 0 degrees correspond to the geometric angle of 0 degrees (3 o'clock on a watch.)
      *
      * @param angle value in degrees.
      */

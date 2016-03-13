@@ -1,5 +1,37 @@
 apply plugin: 'com.android.library'
 
+/*
+ * To upload to Bintray, run:
+ * ./gradlew install
+ * ./gradlew bintrayUpload
+ * More information on http://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en
+ */
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'circular-slider-range'
+
+    publishedGroupId = 'com.bozapro.circular-slider-range'
+    libraryName = 'CircularSliderRange'
+    artifact = 'library'
+
+    libraryDescription = 'A circular slider range for Android.'
+
+    siteUrl = 'https://github.com/bozapro/circular-slider-range/'
+    gitUrl = 'https://github.com/bozapro/circular-slider-range/.git'
+    libraryIssueTracker = 'https://github.com/bozapro/circular-slider-range/issues'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'bozapro'
+    developerName = 'Aleksandar Bozic'
+    developerEmail = 'bozapro@gmail.com'
+
+    licenseName = 'Apache License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -18,7 +50,15 @@ android {
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
+configurations {
+    javadocDep
+}
+
+apply from: '../pom_install.gradle'
+apply from: '../bintray_upload.gradle'
+
+task androidJavadoc(type: Javadoc) {
+    classpath += configurations.javadocDep
+    failOnError false
+    println('Creating Android javadoc!')
 }
