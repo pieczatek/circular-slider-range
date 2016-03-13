@@ -15,22 +15,28 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Locale;
-
 public class CircularSliderRange extends View {
 
     /**
      * Listener interface used to detect when slider moves around.
      */
-    public static interface OnSliderMovedListener {
+    public interface OnSliderMovedListener {
 
         /**
-         * This method is invoked when slider moves, providing position of the slider thumb.
+         * This method is invoked when start thumb is moved, providing position of the start slider thumb.
          *
          * @param pos Value between 0 and 1 representing the current angle.<br>
          *            {@code pos = (Angle - StartingAngle) / (2 * Pi)}
          */
-        public void onSliderMoved(double pos);
+        void onStartSliderMoved(double pos);
+
+        /**
+         * This method is invoked when end thumb is moved, providing position of the end slider thumb.
+         *
+         * @param pos Value between 0 and 1 representing the current angle.<br>
+         *            {@code pos = (Angle - StartingAngle) / (2 * Pi)}
+         */
+        void onEndSliderMoved(double pos);
     }
 
     private int mThumbStartX;
@@ -60,6 +66,10 @@ public class CircularSliderRange extends View {
     private RectF arcRectF = new RectF();
     private Rect arcRect = new Rect();
     private OnSliderMovedListener mListener;
+
+    private enum Thumb {
+        START, END
+    }
 
     public CircularSliderRange(Context context) {
         this(context, null);
@@ -194,18 +204,15 @@ public class CircularSliderRange extends View {
         mLinePaint.setStrokeWidth(80);
         mLinePaint.setAntiAlias(true);
         mLinePaint.setTextSize(50);
-        //helper lines
-//        canvas.drawLine(mCircleCenterX, mCircleCenterY, mThumbStartX, mThumbStartY, mLinePaint);
-//        canvas.drawLine(mCircleCenterX, mCircleCenterY, mThumbEndX, mThumbEndY, mLinePaint);
-//        mLinePaint.setStrokeWidth(9);
-//        canvas.drawLine(mCircleCenterX, mCircleCenterY, mCircleCenterX + mCircleRadius, mCircleCenterY, mLinePaint);
 
-        //mLinePaint.setColor(Color.BLACK);
         arcRect.set(mCircleCenterX - mCircleRadius, mCircleCenterY + mCircleRadius, mCircleCenterX + mCircleRadius, mCircleCenterY - mCircleRadius);
         arcRectF.set(arcRect);
         arcRectF.sort();
 
-        canvas.drawArc(arcRectF, toDrawingAngle(mAngle), toDrawingAngle(mAngleEnd), false, mLinePaint);
+        float drawStart = toDrawingAngle(mAngle);
+        float drawEnd = toDrawingAngle(mAngleEnd);
+
+        canvas.drawArc(arcRectF, drawStart, (360 + drawEnd - drawStart) % 360, false, mLinePaint);
 
         if (mThumbImage != null) {
             // draw png
@@ -219,11 +226,34 @@ public class CircularSliderRange extends View {
             mPaint.setColor(Color.YELLOW);
             canvas.drawCircle(mThumbEndX, mThumbEndY, mThumbSize, mPaint);
 
-            mLinePaint.setStrokeWidth(5);
-            canvas.drawText(String.format(Locale.US, "%.1f", Math.toDegrees(mAngle)), mThumbStartX - 20, mThumbStartY, mLinePaint);
-            canvas.drawText(String.format(Locale.US, "%.1f", Math.toDegrees(mAngleEnd)), mThumbEndX - 20, mThumbEndY, mLinePaint);
+            //helper text
+            //mLinePaint.setStrokeWidth(5);
+            //canvas.drawText(String.format(Locale.US, "%.1f", drawStart), mThumbStartX - 20, mThumbStartY, mLinePaint);
+            //canvas.drawText(String.format(Locale.US, "%.1f", drawEnd), mThumbEndX - 20, mThumbEndY, mLinePaint);
         }
     }
+
+//    /**
+//     * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
+//     *
+//     * @param touchX Where is the touch identifier now on X axis
+//     * @param touchY Where is the touch identifier now on Y axis
+//     */
+//    private void updateSliderState(int touchX, int touchY) {
+//        int distanceX = touchX - mCircleCenterX;
+//        int distanceY = mCircleCenterY - touchY;
+//        //noinspection SuspiciousNameCombination
+//        double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+//        mAngle = Math.acos(distanceX / c);
+//        if (distanceY < 0) {
+//            mAngle = -mAngle;
+//        }
+//
+//        if (mListener != null) {
+//            // notify slider moved listener of the new position which should be in [0..1] range
+//            mListener.onSliderMoved((mAngle - mStartAngle) / (2 * Math.PI));
+//        }
+//    }
 
     /**
      * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
@@ -231,66 +261,38 @@ public class CircularSliderRange extends View {
      * @param touchX Where is the touch identifier now on X axis
      * @param touchY Where is the touch identifier now on Y axis
      */
-    private void updateSliderState(int touchX, int touchY) {
-//        Timber.d("Touch x: %d, y: %d", touchX, touchY);
+    private void updateSliderState(int touchX, int touchY, Thumb thumb) {
         int distanceX = touchX - mCircleCenterX;
         int distanceY = mCircleCenterY - touchY;
         //noinspection SuspiciousNameCombination
         double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-        mAngle = Math.acos(distanceX / c);
-        if (distanceY < 0) {
-            mAngle = -mAngle;
-        }
+        double angle = Math.acos(distanceX / c);
+        if (distanceY < 0)
+            angle = -angle;
 
-//        Timber.d("Calculated start angle radians: %.2f, degrees: %.2f", mAngle, toDrawingAngle(mAngle));
+        if (thumb == Thumb.START) {
+            mAngle = angle;
+        } else {
+            mAngleEnd = angle;
+        }
 
         if (mListener != null) {
-            // notify slider moved listener of the new position which should be in [0..1] range
-            mListener.onSliderMoved((mAngle - mStartAngle) / (2 * Math.PI));
+
+            if (thumb == Thumb.START) {
+                mListener.onStartSliderMoved(toDrawingAngle(angle));
+            } else {
+                mListener.onEndSliderMoved(toDrawingAngle(angle));
+            }
         }
     }
-
-//    private float toDrawingAngleStart(double angleInRadians) {
-////        if (angleInRadians < 0)
-////            angleInRadians = -angleInRadians;
-//        double fixedAngle = Math.toDegrees(angleInRadians);
-//        if (fixedAngle < 0)
-//            fixedAngle = 360 + fixedAngle;
-//        //fixedAngle = 360 - fixedAngle;
-//        return (float) fixedAngle;
-//    }
 
     private float toDrawingAngle(double angleInRadians) {
         double fixedAngle = Math.toDegrees(angleInRadians);
-        if (angleInRadians < 0)
-            fixedAngle = 360 + fixedAngle;
-        fixedAngle = 360 - fixedAngle;
+        if (angleInRadians > 0)
+            fixedAngle = 360 - fixedAngle;
+        else
+            fixedAngle = -fixedAngle;
         return (float) fixedAngle;
-    }
-
-    /**
-     * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
-     *
-     * @param touchX Where is the touch identifier now on X axis
-     * @param touchY Where is the touch identifier now on Y axis
-     */
-    private void updateSliderStateEnd(int touchX, int touchY) {
-//        Timber.d("Touch x: %d, y: %d", touchX, touchY);
-        int distanceX = touchX - mCircleCenterX;
-        int distanceY = mCircleCenterY - touchY;
-        //noinspection SuspiciousNameCombination
-        double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-        mAngleEnd = Math.acos(distanceX / c);
-        if (distanceY < 0) {
-            mAngleEnd = -mAngleEnd;
-        }
-
-//        Timber.d("Calculated angle radians: %.2f, degrees: %.2f", mAngle, Math.toDegrees(mAngle));
-
-        if (mListener != null) {
-            // notify slider moved listener of the new position which should be in [0..1] range
-            mListener.onSliderMoved((mAngleEnd - mStartAngle) / (2 * Math.PI));
-        }
     }
 
     /**
@@ -336,10 +338,10 @@ public class CircularSliderRange extends View {
 
                 if (isThumbStartPressed) {
                     mIsThumbSelected = true;
-                    updateSliderState(x, y);
+                    updateSliderState(x, y, Thumb.START);
                 } else if (isThumbEndPressed) {
                     mIsThumbEndSelected = true;
-                    updateSliderStateEnd(x, y);
+                    updateSliderState(x, y, Thumb.END);
                 }
                 break;
             }
@@ -349,11 +351,11 @@ public class CircularSliderRange extends View {
                 if (mIsThumbSelected) {
                     int x = (int) ev.getX();
                     int y = (int) ev.getY();
-                    updateSliderState(x, y);
+                    updateSliderState(x, y, Thumb.START);
                 } else if (mIsThumbEndSelected) {
                     int x = (int) ev.getX();
                     int y = (int) ev.getY();
-                    updateSliderStateEnd(x, y);
+                    updateSliderState(x, y, Thumb.END);
                 }
                 break;
             }
@@ -366,7 +368,6 @@ public class CircularSliderRange extends View {
             }
         }
 
-        // redraw the whole component
         invalidate();
         return true;
     }
