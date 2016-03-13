@@ -1,6 +1,7 @@
 Circular Slider Range
 =====================
 
+[ ![Download](https://api.bintray.com/packages/bozapro/maven/circular-slider-range/images/download.svg) ](https://bintray.com/bozapro/maven/circular-slider-range/_latestVersion)
 
 What is this?
 -------------
