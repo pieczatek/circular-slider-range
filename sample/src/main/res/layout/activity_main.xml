@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circular="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bozapro.sample.MainActivity">
+
+    <com.bozapro.circularsliderrange.CircularSliderRange
+        android:id="@+id/circular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30dp"
+        circular:angle="1"
+        circular:border_color="#505090"
+        circular:border_thickness="14dp"
+        circular:start_angle="2"
+        circular:thumb_color="#30AEFF"
+        circular:thumb_size="24dp" />/>
+
+</RelativeLayout>

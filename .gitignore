@@ -1,0 +1,22 @@
+#Android generated
+bin
+gen
+
+#IntelliJ IDEA
+.idea
+*.iml
+*.ipr
+*.iws
+out
+
+#Gradle
+.gradle
+build
+
+#Ant
+build.xml
+local.properties
+proguard.cfg
+
+#OSX
+.DS_Store
