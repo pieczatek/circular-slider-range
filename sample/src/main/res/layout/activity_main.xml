@@ -11,11 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="30dp"
-        circular:angle="1"
         circular:border_color="#505090"
         circular:border_thickness="14dp"
+        circular:end_angle="1"
+        circular:end_thumb_color="#FFFF00"
         circular:start_angle="2"
-        circular:thumb_color="#30AEFF"
+        circular:start_thumb_color="#30AEFF"
         circular:thumb_size="24dp" />/>
 
 </RelativeLayout>

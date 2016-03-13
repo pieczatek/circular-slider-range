@@ -20,7 +20,7 @@ public class CircularSliderRange extends View {
     /**
      * Listener interface used to detect when slider moves around.
      */
-    public interface OnSliderMovedListener {
+    public interface OnSliderRangeMovedListener {
 
         /**
          * This method is invoked when start thumb is moved, providing position of the start slider thumb.
@@ -52,11 +52,11 @@ public class CircularSliderRange extends View {
     private Drawable mThumbImage;
     private int mPadding;
     private int mThumbSize;
-    private int mThumbColor;
+    private int mStartThumbColor;
+    private int mEndThumbColor;
     private int mBorderColor;
     private int mBorderThickness;
-    private double mStartAngle;
-    private double mAngle = mStartAngle;
+    private double mAngle;
     private double mAngleEnd;
     private boolean mIsThumbSelected = false;
     private boolean mIsThumbEndSelected = false;
@@ -65,7 +65,7 @@ public class CircularSliderRange extends View {
     private Paint mLinePaint = new Paint();
     private RectF arcRectF = new RectF();
     private Rect arcRect = new Rect();
-    private OnSliderMovedListener mListener;
+    private OnSliderRangeMovedListener mListener;
 
     private enum Thumb {
         START, END
@@ -96,21 +96,24 @@ public class CircularSliderRange extends View {
 
         // read all available attributes
         float startAngle = a.getFloat(R.styleable.CircularSlider_start_angle, (float) Math.PI / 2);
-        float angle = a.getFloat(R.styleable.CircularSlider_angle, (float) Math.PI / 2);
+        float endAngle = a.getFloat(R.styleable.CircularSlider_end_angle, (float) Math.PI / 2);
+        //float angle = a.getFloat(R.styleable.CircularSlider_angle, (float) Math.PI / 2);
         int thumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_thumb_size, 50);
-        int thumbColor = a.getColor(R.styleable.CircularSlider_thumb_color, Color.GRAY);
+        int thumbColor = a.getColor(R.styleable.CircularSlider_start_thumb_color, Color.GRAY);
+        int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
         int borderThickness = a.getDimensionPixelSize(R.styleable.CircularSlider_border_thickness, 20);
         int borderColor = a.getColor(R.styleable.CircularSlider_border_color, Color.RED);
         Drawable thumbImage = a.getDrawable(R.styleable.CircularSlider_thumb_image);
 
         // save those to fields (really, do we need setters here..?)
         setStartAngle(startAngle);
-        setAngle(angle);
+        setEndAngle(endAngle);
         setBorderThickness(borderThickness);
         setBorderColor(borderColor);
         setThumbSize(thumbSize);
         setThumbImage(thumbImage);
-        setThumbColor(thumbColor);
+        setStartThumbColor(thumbColor);
+        setEndThumbColor(thumbEndColor);
 
         // assign padding - check for version because of RTL layout compatibility
         int padding;
@@ -128,13 +131,25 @@ public class CircularSliderRange extends View {
     }
 
     /* ***** Setters ***** */
+
+    /**
+     * Set start angle in radians.
+     *
+     * @param startAngle value in radians.
+     */
     public void setStartAngle(double startAngle) {
-        mStartAngle = startAngle;
+        mAngle = startAngle;
     }
 
-    public void setAngle(double angle) {
-        mAngle = angle;
+    /**
+     * Set end angle in radians.
+     *
+     * @param angle value in radians.
+     */
+    public void setEndAngle(double angle) {
+        mAngleEnd = angle;
     }
+
 
     public void setThumbSize(int thumbSize) {
         mThumbSize = thumbSize;
@@ -152,8 +167,12 @@ public class CircularSliderRange extends View {
         mThumbImage = drawable;
     }
 
-    public void setThumbColor(int color) {
-        mThumbColor = color;
+    public void setStartThumbColor(int color) {
+        mStartThumbColor = color;
+    }
+
+    public void setEndThumbColor(int color) {
+        mEndThumbColor = color;
     }
 
     public void setPadding(int padding) {
@@ -220,10 +239,10 @@ public class CircularSliderRange extends View {
             mThumbImage.draw(canvas);
         } else {
             // draw colored circle
-            mPaint.setColor(mThumbColor);
+            mPaint.setColor(mStartThumbColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(mThumbStartX, mThumbStartY, mThumbSize, mPaint);
-            mPaint.setColor(Color.YELLOW);
+            mPaint.setColor(mEndThumbColor);
             canvas.drawCircle(mThumbEndX, mThumbEndY, mThumbSize, mPaint);
 
             //helper text
@@ -232,28 +251,6 @@ public class CircularSliderRange extends View {
             //canvas.drawText(String.format(Locale.US, "%.1f", drawEnd), mThumbEndX - 20, mThumbEndY, mLinePaint);
         }
     }
-
-//    /**
-//     * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
-//     *
-//     * @param touchX Where is the touch identifier now on X axis
-//     * @param touchY Where is the touch identifier now on Y axis
-//     */
-//    private void updateSliderState(int touchX, int touchY) {
-//        int distanceX = touchX - mCircleCenterX;
-//        int distanceY = mCircleCenterY - touchY;
-//        //noinspection SuspiciousNameCombination
-//        double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-//        mAngle = Math.acos(distanceX / c);
-//        if (distanceY < 0) {
-//            mAngle = -mAngle;
-//        }
-//
-//        if (mListener != null) {
-//            // notify slider moved listener of the new position which should be in [0..1] range
-//            mListener.onSliderMoved((mAngle - mStartAngle) / (2 * Math.PI));
-//        }
-//    }
 
     /**
      * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
@@ -296,24 +293,11 @@ public class CircularSliderRange extends View {
     }
 
     /**
-     * Position setter. This method should be used to manually position the slider thumb.<br>
-     * Note that counterclockwise {@link #mStartAngle} is used to determine the initial thumb position.
+     * Set slider range moved listener. Set {@link OnSliderRangeMovedListener} to {@code null} to remove it.
      *
-     * @param pos Value between 0 and 1 used to calculate the angle. {@code Angle = StartingAngle + pos * 2 * Pi}<br>
-     *            Note that angle will not be updated if the position parameter is not in the valid range [0..1]
+     * @param listener Instance of the slider range moved listener, or null when removing it
      */
-    public void setPosition(double pos) {
-        if (pos >= 0 && pos <= 1) {
-            mAngle = mStartAngle + pos * 2 * Math.PI;
-        }
-    }
-
-    /**
-     * Saves a new slider moved listner. Set {@link OnSliderMovedListener} to {@code null} to remove it.
-     *
-     * @param listener Instance of the slider moved listener, or null when removing it
-     */
-    public void setOnSliderMovedListener(OnSliderMovedListener listener) {
+    public void setOnSliderRangeMovedListener(OnSliderRangeMovedListener listener) {
         mListener = listener;
     }
 
