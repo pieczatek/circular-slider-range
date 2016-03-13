@@ -17,6 +17,6 @@
         range:end_thumb_image="@drawable/circle_shape"
         range:start_angle="120"
         range:start_thumb_color="#30AEFF"
-        range:thumb_size="60dp" />
+        range:thumb_size="50dp" />
 
 </RelativeLayout>
