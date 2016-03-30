@@ -57,6 +57,8 @@ public class CircularSliderRange extends View {
     private int mEndThumbColor;
     private int mBorderColor;
     private int mBorderThickness;
+    private int mArcDashSize;
+    private int mArcColor;
     private double mAngle;
     private double mAngleEnd;
     private boolean mIsThumbSelected = false;
@@ -104,6 +106,8 @@ public class CircularSliderRange extends View {
         int thumbColor = a.getColor(R.styleable.CircularSlider_start_thumb_color, Color.GRAY);
         int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
         int borderThickness = a.getDimensionPixelSize(R.styleable.CircularSlider_border_thickness, 20);
+        int arcDashSize = a.getDimensionPixelSize(R.styleable.CircularSlider_arc_dash_size, 60);
+        int arcColor = a.getColor(R.styleable.CircularSlider_arc_color, 0);
         int borderColor = a.getColor(R.styleable.CircularSlider_border_color, Color.RED);
         Drawable thumbImage = a.getDrawable(R.styleable.CircularSlider_start_thumb_image);
         Drawable thumbEndImage = a.getDrawable(R.styleable.CircularSlider_end_thumb_image);
@@ -118,6 +122,8 @@ public class CircularSliderRange extends View {
         setEndThumbImage(thumbEndImage);
         setStartThumbColor(thumbColor);
         setEndThumbColor(thumbEndColor);
+        setArcColor(arcColor);
+        setArcDashSize(arcDashSize);
 
         // assign padding - check for version because of RTL layout compatibility
         int padding;
@@ -189,6 +195,14 @@ public class CircularSliderRange extends View {
         mPadding = padding;
     }
 
+    public void setArcColor(int color) {
+        mArcColor = color;
+    }
+
+    public void setArcDashSize(int value) {
+        mArcDashSize = value;
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // use smaller dimension for calculations (depends on parent size)
@@ -228,9 +242,9 @@ public class CircularSliderRange extends View {
         mThumbEndX = (int) (mCircleCenterX + mCircleRadius * Math.cos(mAngleEnd));
         mThumbEndY = (int) (mCircleCenterY - mCircleRadius * Math.sin(mAngleEnd));
 
-        mLinePaint.setColor(Color.RED);
+        mLinePaint.setColor(mArcColor == 0 ? Color.RED : mArcColor);
         mLinePaint.setStyle(Paint.Style.STROKE);
-        mLinePaint.setStrokeWidth(80);
+        mLinePaint.setStrokeWidth(mArcDashSize);
         mLinePaint.setAntiAlias(true);
         mLinePaint.setTextSize(50);
 
