@@ -11,6 +11,8 @@
         <attr name="end_thumb_image" format="reference" />
         <attr name="start_thumb_color" format="color" />
         <attr name="end_thumb_color" format="color" />
+        <attr name="arc_color" format="color" />
+        <attr name="arc_dash_size" format="dimension" />
     </declare-styleable>
 
 </resources>

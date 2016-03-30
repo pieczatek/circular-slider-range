@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="30dp"
+        range:arc_color="@color/colorAccent"
+        range:arc_dash_size="20dp"
         range:border_color="#505090"
         range:border_thickness="14dp"
         range:end_angle="30"
