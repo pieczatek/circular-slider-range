@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -37,6 +38,20 @@ public class CircularSliderRange extends View {
          *            {@code pos = (Angle - StartingAngle) / (2 * Pi)}
          */
         void onEndSliderMoved(double pos);
+
+        /**
+         * This method is invoked when start slider is pressed/released.
+         *
+         * @param event Event represent state of the slider, it can be in two states: Pressed or Released.
+         */
+        void onStartSliderEvent(ThumbEvent event);
+
+        /**
+         * This method is invoked when end slider is pressed/released.
+         *
+         * @param event Event represent state of the slider, it can be in two states: Pressed or Released.
+         */
+        void onEndSliderEvent(ThumbEvent event);
     }
 
     private int mThumbStartX;
@@ -359,6 +374,13 @@ public class CircularSliderRange extends View {
                     mIsThumbEndSelected = true;
                     updateSliderState(x, y, Thumb.END);
                 }
+
+                if (mListener != null) {
+                    if (mIsThumbSelected)
+                        mListener.onStartSliderEvent(ThumbEvent.THUMB_PRESSED);
+                    if (mIsThumbEndSelected)
+                        mListener.onEndSliderEvent(ThumbEvent.THUMB_PRESSED);
+                }
                 break;
             }
 
@@ -377,6 +399,13 @@ public class CircularSliderRange extends View {
             }
 
             case MotionEvent.ACTION_UP: {
+                if (mListener != null) {
+                    if (mIsThumbSelected)
+                        mListener.onStartSliderEvent(ThumbEvent.THUMB_RELEASED);
+                    if (mIsThumbEndSelected)
+                        mListener.onEndSliderEvent(ThumbEvent.THUMB_RELEASED);
+                }
+
                 // finished moving (this is the last touch)
                 mIsThumbSelected = false;
                 mIsThumbEndSelected = false;
