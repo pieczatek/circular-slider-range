@@ -114,9 +114,7 @@ public class CircularSliderRange extends View {
 
         // read all available attributes
         float startAngle = a.getFloat(R.styleable.CircularSlider_start_angle, 90);
-        startAngle = (float) Math.toRadians(startAngle);
         float endAngle = a.getFloat(R.styleable.CircularSlider_end_angle, 60);
-        endAngle = (float) Math.toRadians(endAngle);
         int thumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_thumb_size, 50);
         int thumbColor = a.getColor(R.styleable.CircularSlider_start_thumb_color, Color.GRAY);
         int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
@@ -164,7 +162,7 @@ public class CircularSliderRange extends View {
      * @param startAngle value in degrees.
      */
     public void setStartAngle(double startAngle) {
-        mAngle = startAngle;
+        mAngle = fromDrawingAngle(startAngle);
     }
 
     /**
@@ -174,7 +172,7 @@ public class CircularSliderRange extends View {
      * @param angle value in degrees.
      */
     public void setEndAngle(double angle) {
-        mAngleEnd = angle;
+        mAngleEnd = fromDrawingAngle(angle);
     }
 
 
@@ -337,6 +335,11 @@ public class CircularSliderRange extends View {
         else
             fixedAngle = -fixedAngle;
         return (float) fixedAngle;
+    }
+
+    private double fromDrawingAngle(double angleInDegrees) {
+        double radians = Math.toRadians(angleInDegrees);
+        return -radians;
     }
 
     /**
