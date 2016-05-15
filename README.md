@@ -44,6 +44,7 @@ Sample usage
         range:end_thumb_image="@drawable/circle_shape"
         range:start_angle="120"
         range:start_thumb_color="#30AEFF"
+        range:start_thumb_size="60dp"
         range:thumb_size="50dp" />
     ...
 
@@ -57,7 +58,9 @@ Here are some short explanations for the attributes provided by the view. You ca
 - `end_angle`: (**float**) The position of the slider end thumb, a degrees based value of the angle (0-360).
 - `border_thickness`: (**dimension**) How thick should the slider border be (this can be a 0-dimension).
 - `border_color`: (**color**) Recolors the slider border to the specified color.
-- `thumb_size`: (**dimension**) Radius of the slider thumb (thumb is the slider's movable part).
+- `thumb_size`: (**dimension**) Radius of the slider thumb (thumb is the slider's movable part). May be overridden with specific values for start/end thumbs.
+- `end_thumb_size`: (**dimension**) Radius of the end slider thumb (thumb is the slider's movable part). This value will override `thumb_size` for end thumb.
+- `start_thumb_size`: (**dimension**) Radius of the start slider thumb (thumb is the slider's movable part). This value will override `thumb_size` for start thumb.
 - `start_thumb_image`: (**reference**) Set this to use an image instead of a colored circle for the slider start thumb.
 - `end_thumb_image`: (**reference**) Set this to use an image instead of a colored circle for the slider end thumb.
 - `start_thumb_color`: (**color**) Set this to use a colored circle instead of an image for the slider start thumb.
