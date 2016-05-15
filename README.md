@@ -20,7 +20,7 @@ Requirements
 Getting Started
 ---------------
 * Add dependency into you `build.gradle`:
- ```compile 'com.bozapro.circular-slider-range:library:1.0.0'```
+ ```compile 'com.bozapro.circular-slider-range:library:1.2.0'```
  
 This will run the app on your device. You may need to download a newer version of Gradle, which will be available in the Android Studio UI if compile fails.
 
