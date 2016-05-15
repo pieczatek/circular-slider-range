@@ -67,7 +67,8 @@ public class CircularSliderRange extends View {
     private Drawable mStartThumbImage;
     private Drawable mEndThumbImage;
     private int mPadding;
-    private int mThumbSize;
+    private int mStartThumbSize;
+    private int mEndThumbSize;
     private int mStartThumbColor;
     private int mEndThumbColor;
     private int mBorderColor;
@@ -84,6 +85,7 @@ public class CircularSliderRange extends View {
     private RectF arcRectF = new RectF();
     private Rect arcRect = new Rect();
     private OnSliderRangeMovedListener mListener;
+    private static final int THUMB_SIZE_NOT_DEFINED = -1;
 
     private enum Thumb {
         START, END
@@ -116,6 +118,8 @@ public class CircularSliderRange extends View {
         float startAngle = a.getFloat(R.styleable.CircularSlider_start_angle, 90);
         float endAngle = a.getFloat(R.styleable.CircularSlider_end_angle, 60);
         int thumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_thumb_size, 50);
+        int startThumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_start_thumb_size, THUMB_SIZE_NOT_DEFINED);
+        int endThumbSize = a.getDimensionPixelSize(R.styleable.CircularSlider_end_thumb_size, THUMB_SIZE_NOT_DEFINED);
         int thumbColor = a.getColor(R.styleable.CircularSlider_start_thumb_color, Color.GRAY);
         int thumbEndColor = a.getColor(R.styleable.CircularSlider_end_thumb_color, Color.GRAY);
         int borderThickness = a.getDimensionPixelSize(R.styleable.CircularSlider_border_thickness, 20);
@@ -131,6 +135,8 @@ public class CircularSliderRange extends View {
         setBorderThickness(borderThickness);
         setBorderColor(borderColor);
         setThumbSize(thumbSize);
+        setStartThumbSize(startThumbSize);
+        setEndThumbSize(endThumbSize);
         setStartThumbImage(thumbImage);
         setEndThumbImage(thumbEndImage);
         setStartThumbColor(thumbColor);
@@ -175,9 +181,29 @@ public class CircularSliderRange extends View {
         mAngleEnd = fromDrawingAngle(angle);
     }
 
-
     public void setThumbSize(int thumbSize) {
-        mThumbSize = thumbSize;
+        setStartThumbSize(thumbSize);
+        setEndThumbSize(thumbSize);
+    }
+
+    public void setStartThumbSize(int thumbSize) {
+        if (thumbSize == THUMB_SIZE_NOT_DEFINED)
+            return;
+        mStartThumbSize = thumbSize;
+    }
+
+    public void setEndThumbSize(int thumbSize) {
+        if (thumbSize == THUMB_SIZE_NOT_DEFINED)
+            return;
+        mEndThumbSize = thumbSize;
+    }
+
+    public int getStartThumbSize() {
+        return mStartThumbSize;
+    }
+
+    public int getEndThumbSize() {
+        return mEndThumbSize;
     }
 
     public void setBorderThickness(int circleBorderThickness) {
@@ -269,7 +295,7 @@ public class CircularSliderRange extends View {
         final float drawEnd = toDrawingAngle(mAngleEnd);
 
         canvas.drawArc(arcRectF, drawStart, (360 + drawEnd - drawStart) % 360, false, mLinePaint);
-
+        int mThumbSize = getStartThumbSize();
         if (mStartThumbImage != null) {
             // draw png
             mStartThumbImage.setBounds(mThumbStartX - mThumbSize / 2, mThumbStartY - mThumbSize / 2, mThumbStartX + mThumbSize / 2, mThumbStartY + mThumbSize / 2);
@@ -286,6 +312,7 @@ public class CircularSliderRange extends View {
             //canvas.drawText(String.format(Locale.US, "%.1f", drawEnd), mThumbEndX - 20, mThumbEndY, mLinePaint);
         }
 
+        mThumbSize = getEndThumbSize();
         if (mEndThumbImage != null) {
             // draw png
             mEndThumbImage.setBounds(mThumbEndX - mThumbSize / 2, mThumbEndY - mThumbSize / 2, mThumbEndX + mThumbSize / 2, mThumbEndY + mThumbSize / 2);
@@ -360,11 +387,13 @@ public class CircularSliderRange extends View {
                 int x = (int) ev.getX();
                 int y = (int) ev.getY();
 
+                int mThumbSize = getStartThumbSize();
                 boolean isThumbStartPressed = x < mThumbStartX + mThumbSize
                         && x > mThumbStartX - mThumbSize
                         && y < mThumbStartY + mThumbSize
                         && y > mThumbStartY - mThumbSize;
 
+                mThumbSize = getEndThumbSize();
                 boolean isThumbEndPressed = x < mThumbEndX + mThumbSize
                         && x > mThumbEndX - mThumbSize
                         && y < mThumbEndY + mThumbSize
