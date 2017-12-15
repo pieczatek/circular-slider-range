@@ -1,11 +1,11 @@
-package com.bozapro.sample;
+package com.pieczatek.sample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.bozapro.circularsliderrange.CircularSliderRange;
-import com.bozapro.circularsliderrange.ThumbEvent;
+import com.pieczatek.circularsliderrange.CircularSliderRange;
+import com.pieczatek.circularsliderrange.ThumbEvent;
 
 
 public class MainActivity extends AppCompatActivity {

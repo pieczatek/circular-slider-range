@@ -1,4 +1,4 @@
-package com.bozapro.circularsliderrange;
+package com.pieczatek.circularsliderrange;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

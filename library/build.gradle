@@ -11,21 +11,21 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'circular-slider-range'
 
-    publishedGroupId = 'com.bozapro.circular-slider-range'
+    publishedGroupId = 'com.pieczatek.circular-slider-range'
     libraryName = 'CircularSliderRange'
     artifact = 'library'
 
     libraryDescription = 'A circular slider range for Android.'
 
-    siteUrl = 'https://github.com/bozapro/circular-slider-range/'
-    gitUrl = 'https://github.com/bozapro/circular-slider-range/.git'
-    libraryIssueTracker = 'https://github.com/bozapro/circular-slider-range/issues'
+    siteUrl = 'https://github.com/pieczatek/circular-slider-range/'
+    gitUrl = 'https://github.com/pieczatek/circular-slider-range/.git'
+    libraryIssueTracker = 'https://github.com/pieczatek/circular-slider-range/issues'
 
     libraryVersion = '1.2.0'
 
-    developerId = 'bozapro'
-    developerName = 'Aleksandar Bozic'
-    developerEmail = 'bozapro@gmail.com'
+    developerId = 'pieczatek'
+    developerName = 'pieczatek'
+    developerEmail = 'pieczatek@wp.pl'
 
     licenseName = 'Apache License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0'

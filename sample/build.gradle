@@ -10,7 +10,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.bozapro.circularsliderrange"
+        applicationId "com.pieczatek.circularsliderrange"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
