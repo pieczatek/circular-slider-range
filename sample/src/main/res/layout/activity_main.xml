@@ -6,20 +6,42 @@
     android:layout_height="match_parent"
     tools:context="com.bozapro.sample.MainActivity">
 
-    <com.bozapro.circularsliderrange.CircularSliderRange
-        android:id="@+id/circular"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="30dp"
-        range:arc_color="@color/colorAccent"
-        range:arc_dash_size="20dp"
-        range:border_color="#505090"
-        range:border_thickness="14dp"
-        range:end_angle="45"
-        range:end_thumb_image="@drawable/circle_shape"
-        range:start_angle="0"
-        range:start_thumb_color="#30AEFF"
-        range:start_thumb_size="60dp"
-        range:thumb_size="50dp" />
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp">
+
+        <com.bozapro.circularsliderrange.CircularSliderRange
+            android:id="@+id/circular1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="14dp"
+            range:arc_color="#e20e12"
+            range:arc_dash_size="10dp"
+            range:border_color="#00ffffff"
+            range:border_thickness="10dp"
+            range:end_angle="30"
+            range:start_angle="120"
+            range:start_thumb_color="#e20e12"
+            range:end_thumb_color="#e20e12"
+            range:start_thumb_size="20dp"
+            range:thumb_size="20dp"/>
+
+        <com.bozapro.circularsliderrange.CircularSliderRange
+            android:id="@+id/circular2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="54dp"
+            range:arc_color="#20e20e"
+            range:arc_dash_size="10dp"
+            range:border_color="#00ffffff"
+            range:border_thickness="10dp"
+            range:end_angle="30"
+            range:start_angle="120"
+            range:start_thumb_color="#20e20e"
+            range:end_thumb_color="#20e20e"
+            range:start_thumb_size="20dp"
+            range:thumb_size="20dp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

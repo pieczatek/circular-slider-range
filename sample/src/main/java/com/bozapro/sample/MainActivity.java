@@ -18,8 +18,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        CircularSliderRange sliderRange = (CircularSliderRange) findViewById(R.id.circular);
-        sliderRange.setOnSliderRangeMovedListener(new CircularSliderRange.OnSliderRangeMovedListener() {
+        CircularSliderRange sliderRange1 = findViewById(R.id.circular1);
+        sliderRange1.setOnSliderRangeMovedListener(new CircularSliderRange.OnSliderRangeMovedListener() {
+            @Override
+            public void onStartSliderMoved(double pos) {
+                Log.d(TAG, "onStartSliderMoved:" + pos);
+            }
+
+            @Override
+            public void onEndSliderMoved(double pos) {
+                Log.d(TAG, "onEndSliderMoved:" + pos);
+            }
+
+            @Override
+            public void onStartSliderEvent(ThumbEvent event) {
+                Log.d(TAG, "onStartSliderEvent:" + event);
+            }
+
+            @Override
+            public void onEndSliderEvent(ThumbEvent event) {
+                Log.d(TAG, "onEndSliderEvent:" + event);
+            }
+        });
+
+
+        CircularSliderRange sliderRange2 = findViewById(R.id.circular2);
+        sliderRange2.setOnSliderRangeMovedListener(new CircularSliderRange.OnSliderRangeMovedListener() {
             @Override
             public void onStartSliderMoved(double pos) {
                 Log.d(TAG, "onStartSliderMoved:" + pos);
