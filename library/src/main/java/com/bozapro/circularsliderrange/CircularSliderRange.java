@@ -381,6 +381,9 @@ public class CircularSliderRange extends View {
     @Override
     @SuppressWarnings("NullableProblems")
     public boolean onTouchEvent(MotionEvent ev) {
+
+        boolean touch = false;
+
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 // start moving the thumb (this is the first touch)
@@ -413,6 +416,8 @@ public class CircularSliderRange extends View {
                     if (mIsThumbEndSelected)
                         mListener.onEndSliderEvent(ThumbEvent.THUMB_PRESSED);
                 }
+
+                touch = mIsThumbSelected || mIsThumbEndSelected;
                 break;
             }
 
@@ -427,6 +432,8 @@ public class CircularSliderRange extends View {
                     int y = (int) ev.getY();
                     updateSliderState(x, y, Thumb.END);
                 }
+
+                touch = mIsThumbSelected || mIsThumbEndSelected;
                 break;
             }
 
@@ -438,6 +445,8 @@ public class CircularSliderRange extends View {
                         mListener.onEndSliderEvent(ThumbEvent.THUMB_RELEASED);
                 }
 
+                touch = mIsThumbSelected || mIsThumbEndSelected;
+
                 // finished moving (this is the last touch)
                 mIsThumbSelected = false;
                 mIsThumbEndSelected = false;
@@ -446,7 +455,7 @@ public class CircularSliderRange extends View {
         }
 
         invalidate();
-        return true;
+        return touch;
     }
 
 }
