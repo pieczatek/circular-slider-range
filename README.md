@@ -1,32 +1,8 @@
 Circular Slider Range
 =====================
 
-[ ![Download](https://api.bintray.com/packages/bozapro/maven/circular-slider-range/images/download.svg) ](https://bintray.com/bozapro/maven/circular-slider-range/_latestVersion)
-
-What is this?
--------------
-Circular Slider Range is a small Android library used for slider range. It works similarly to the regular slider control (SeekBar), just goes around in a circular fashion and provider possibility of start and end positions.
-
-**Note**: that the start/stop thumbs scroller (the thing you drag around) can be either a solid-color circle or a custom drawable (like a PNG image).
-
-**Motivation to write this library i got from [CircularSlider](https://github.com/milosmns/circular-slider-android) library, which is used as starting point.**
-
-Requirements
-------------
-- Android 3.0 or later (Minimum SDK level 11)
-- Android Studio (to compile and use)
-- **Eclipse is not supported**
-
-Getting Started
----------------
-* Add dependency into you `build.gradle`:
- ```compile 'com.bozapro.circular-slider-range:library:1.2.0'```
- 
-This will run the app on your device. You may need to download a newer version of Gradle, which will be available in the Android Studio UI if compile fails.
-
-What does it look like?
-----------------------
-![screenshot_1](graphics/screenshot.jpg)
+Forked from https://github.com/bozapro/circular-slider-range
+All glory to @bozapro
 
 Sample usage
 ------------
@@ -50,7 +26,6 @@ Sample usage
 
 Explanation of attributes
 -------------------------
-Here are some short explanations for the attributes provided by the view. You can leave out any of them, values will get set to default ones.
 
 - `arc_color`: (**refference**) Color of the arc drawn between two thumbs.
 - `arc_dash_size`: (**dimension**) Define dash size of the arc drawn between two thumbs.
@@ -66,8 +41,3 @@ Here are some short explanations for the attributes provided by the view. You ca
 - `start_thumb_color`: (**color**) Set this to use a colored circle instead of an image for the slider start thumb.
 - `end_thumb_color`: (**color**) Set this to use a colored circle instead of an image for the slider end thumb.
 
-**Note** that `thumb color` and `thumb image` are mutually exclusive, you can't use both.
-
-Support
--------
-If you've found an error while using the library, please [file an issue](https://github.com/bozapro/circular-slider-range/issues/new).
