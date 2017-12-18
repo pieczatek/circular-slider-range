@@ -323,6 +323,16 @@ public class CircularSliderRange extends View {
         }
     }
 
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int size = width > height ? height : width;
+        setMeasuredDimension(size, size);
+
+    }
+
     /**
      * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
      *
